@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
+import '../utils/array_extensions.js'
 
-let users = []
+const users = []
 
-export const getUsers = (req, res) => {
+export const getUsers = (_, res) => {
     console.log(users)
     res
         .status(200)
@@ -29,7 +30,7 @@ export const getUserById = (req, res) => {
 export const deleteUserById = (req, res) => {
     const { id } = req.params
 
-    users = users.filter((user) => user.id !== id)
+    users.remove((user) => user.id === id)
 
     res.status(200).send(`User with ${id} id is deleted successfully`)
 }
