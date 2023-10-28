@@ -1,51 +1,16 @@
 import express from 'express'
-import { v4 as uuidv4 } from 'uuid';
+import {getUsers, addUser, getUserById, deleteUserById, updateUser} from '../controllers/users.js'
 
 const router = express.Router()
 
-let users = []
+router.get('/', getUsers)
 
-router.get('/', (req, res) => {
-    console.log(users)
-    res
-        .status(200)
-        .send(users)
-})
+router.post('/', addUser)
 
-router.post('/', (req, res) => {
-    const user = req.body
-    const userWithId = { ...user, id: uuidv4() }
-    users.push(userWithId)
+router.get("/:id", getUserById)
 
-    res.status(200).send('User added')
-})
+router.delete("/:id", deleteUserById)
 
-router.get("/:id", (req, res) => {
-    console.log(req.params)
-
-    const { id } = req.params
-    const user = users.find((user) => user.id === id)
-
-    res.status(200).send(user)
-})
-
-router.delete("/:id", (req, res) => {
-    const { id } = req.params
-
-    users = users.filter((user) => user.id !== id)
-
-    res.status(200).send(`User with ${id} id is deleted successfully`)
-})
-
-router.patch("/:id", (req, res) => {
-    const { id } = req.params
-    const { name, age } = req.body
-    const user = users.find((user) => user.id === id)
-
-    if (name) user.name = name
-    if (age) user.age = age
-
-    res.status(200).send(`User with ${id} has been udpated`)
-})
+router.patch("/:id", updateUser)
 
 export default router
